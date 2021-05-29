@@ -47,11 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                try {
-                    emailValidator(emailText,passText);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                emailValidator(emailText,passText);
             }
         });
 
@@ -60,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     // the function which triggered when the VALIDATE button is clicked
     // which validates the email address entered by the user
-    public void emailValidator(EditText etMail,EditText pass) throws JSONException {
+    public void emailValidator(EditText etMail,EditText pass)  {
 
         // extract the entered data from the EditText
         String emailToText = etMail.getText().toString();
@@ -72,11 +68,14 @@ public class MainActivity extends AppCompatActivity {
         // the EMAIL_ADDRESS, which is implemented same below
         if (!emailToText.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailToText).matches()) {
             Toast.makeText(this, "Email Verified !", Toast.LENGTH_SHORT).show();
-
-            obj.put("email",emailToText);
-            obj.put("password",passText);
-            deciderState();
-
+try {
+    obj.put("email", emailToText);
+    obj.put("password", passText);
+    deciderState();
+}catch (JSONException e){
+    e.printStackTrace();
+    Toast.makeText(MainActivity.this, "Register Error!" + e.toString(), Toast.LENGTH_SHORT).show();
+}
         } else {
             Toast.makeText(this, "Enter valid Email address !", Toast.LENGTH_SHORT).show();
         }
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("Response", response.toString());
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setCancelable(true);
-                        builder.setTitle("User Entries");
+                        builder.setTitle("Success");
                         builder.setMessage(response.toString());
                         builder.show();
                         JSONArray value ;
@@ -120,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("Response Error", error.toString());
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setCancelable(true);
-                        builder.setTitle("User Entries");
+                        builder.setTitle("Login Failed");
                         builder.setMessage(error.toString());
                         builder.show();
                         JSONArray value ;
